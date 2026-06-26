@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/di/injection.dart';
-import '../../../core/enums.dart';
+import '../../../core/money/money.dart';
 import '../../../core/ui/category_visuals.dart';
+import '../../../core/ui/enum_labels.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/budget_progress.dart';
 import 'cubit/budgets_cubit.dart';
 import 'cubit/budgets_state.dart';
@@ -14,10 +16,11 @@ class BudgetsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     return BlocProvider<BudgetsCubit>(
       create: (_) => getIt<BudgetsCubit>(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Бюджеты')),
+        appBar: AppBar(title: Text(l.budTitle)),
         floatingActionButton: FloatingActionButton(
           onPressed: () => context.go('/budgets/new'),
           child: const Icon(Icons.add),
@@ -29,7 +32,12 @@ class BudgetsScreen extends StatelessWidget {
               const Center(child: CircularProgressIndicator()),
             BudgetsLoaded(:final List<BudgetProgress> budgets) =>
               budgets.isEmpty
-                  ? const _Empty()
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(l.budEmpty, textAlign: TextAlign.center),
+                      ),
+                    )
                   : ListView(
                       padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
                       children: <Widget>[
@@ -44,33 +52,14 @@ class BudgetsScreen extends StatelessWidget {
   }
 }
 
-class _Empty extends StatelessWidget {
-  const _Empty();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Text(
-          'Бюджетов пока нет.\nЗадайте лимит по категории, нажав +.',
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
 class _BudgetCard extends StatelessWidget {
   const _BudgetCard({required this.budget});
 
   final BudgetProgress budget;
 
-  String get _periodLabel =>
-      budget.period == BudgetPeriod.week ? 'неделя' : 'месяц';
-
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final ColorScheme scheme = Theme.of(context).colorScheme;
     final String lang = Localizations.localeOf(context).languageCode;
     final Color catColor = CategoryVisuals.colorFrom(
@@ -78,6 +67,7 @@ class _BudgetCard extends StatelessWidget {
       fallback: scheme.primary,
     );
     final Color barColor = budget.isOver ? scheme.error : catColor;
+    final Money overBy = Money(budget.spentMinor - budget.limitMinor);
 
     return Dismissible(
       key: ValueKey<int>(budget.id),
@@ -112,7 +102,8 @@ class _BudgetCard extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      '${budget.categoryName(lang)} · $_periodLabel',
+                      '${budget.categoryName(lang)} · '
+                      '${budgetPeriodLabel(l, budget.period)}',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -132,11 +123,12 @@ class _BudgetCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('${budget.spent.format()} из ${budget.limit.format()}'),
+                  Text(l.budSpentOfLimit(
+                      budget.spent.format(), budget.limit.format())),
                   Text(
                     budget.isOver
-                        ? 'Превышен на ${(-budget.remaining.minorUnits / 100).abs().toStringAsFixed(0)} ₸'
-                        : 'Осталось ${budget.remaining.format()}',
+                        ? l.budOverBy(overBy.format())
+                        : l.budRemaining(budget.remaining.format()),
                     style: TextStyle(
                       color: budget.isOver ? scheme.error : null,
                       fontWeight: FontWeight.w600,

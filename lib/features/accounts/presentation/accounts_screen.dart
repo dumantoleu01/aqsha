@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/di/injection.dart';
 import '../../../core/enums.dart';
+import '../../../core/ui/enum_labels.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/account.dart';
 import 'cubit/accounts_cubit.dart';
 import 'cubit/accounts_state.dart';
@@ -13,20 +15,27 @@ class AccountsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     return BlocProvider<AccountsCubit>(
       create: (_) => getIt<AccountsCubit>(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Счета')),
+        appBar: AppBar(title: Text(l.accTitle)),
         floatingActionButton: FloatingActionButton(
           onPressed: () => context.go('/settings/accounts/new'),
           child: const Icon(Icons.add),
         ),
         body: BlocBuilder<AccountsCubit, AccountsState>(
-          builder: (BuildContext context, AccountsState state) => switch (state) {
+          builder: (BuildContext context, AccountsState state) =>
+              switch (state) {
             AccountsLoading() =>
               const Center(child: CircularProgressIndicator()),
             AccountsLoaded(:final List<Account> accounts) => accounts.isEmpty
-                ? const _EmptyAccounts()
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(l.accEmpty, textAlign: TextAlign.center),
+                    ),
+                  )
                 : ListView.separated(
                     itemCount: accounts.length,
                     separatorBuilder: (_, _) => const Divider(height: 1),
@@ -47,13 +56,14 @@ class _AccountTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final Color color = account.balance.isNegative
         ? Theme.of(context).colorScheme.error
         : Theme.of(context).colorScheme.onSurface;
     return ListTile(
       leading: CircleAvatar(child: Icon(accountTypeIcon(account.type))),
       title: Text(account.name),
-      subtitle: Text(accountTypeLabel(account.type)),
+      subtitle: Text(accountTypeLabel(l, account.type)),
       trailing: Text(
         account.balance.format(),
         style: Theme.of(context)
@@ -65,31 +75,8 @@ class _AccountTile extends StatelessWidget {
   }
 }
 
-class _EmptyAccounts extends StatelessWidget {
-  const _EmptyAccounts();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Text(
-          'Пока нет счетов.\nНажмите + чтобы добавить первый.',
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
 IconData accountTypeIcon(AccountType type) => switch (type) {
       AccountType.cash => Icons.payments,
       AccountType.card => Icons.credit_card,
       AccountType.savings => Icons.savings,
-    };
-
-String accountTypeLabel(AccountType type) => switch (type) {
-      AccountType.cash => 'Наличные',
-      AccountType.card => 'Карта',
-      AccountType.savings => 'Накопления',
     };

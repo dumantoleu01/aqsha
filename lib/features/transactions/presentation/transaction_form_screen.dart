@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/di/injection.dart';
 import '../../../core/enums.dart';
 import '../../../core/money/money.dart';
 import '../../../core/ui/category_visuals.dart';
+import '../../../core/ui/date_labels.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../accounts/domain/account.dart';
 import '../../accounts/domain/accounts_repository.dart';
 import '../../categories/domain/categories_repository.dart';
@@ -57,10 +58,9 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
     super.dispose();
   }
 
-  List<Category> get _visibleCategories =>
-      (_categories ?? <Category>[])
-          .where((Category c) => c.type == _type)
-          .toList();
+  List<Category> get _visibleCategories => (_categories ?? <Category>[])
+      .where((Category c) => c.type == _type)
+      .toList();
 
   Future<void> _pickDate() async {
     final DateTime? picked = await showDatePicker(
@@ -73,14 +73,15 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   }
 
   Future<void> _save() async {
+    final AppLocalizations l = AppLocalizations.of(context);
     final double major =
         double.tryParse(_amount.text.replaceAll(',', '.').trim()) ?? 0;
     if (major <= 0) {
-      _toast('Введите сумму больше нуля');
+      _toast(l.txEnterAmount);
       return;
     }
     if (_account == null) {
-      _toast('Сначала создайте счёт');
+      _toast(l.txCreateAccount);
       return;
     }
     setState(() => _saving = true);
@@ -100,43 +101,45 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
     }
   }
 
-  void _toast(String msg) => ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(msg)));
+  void _toast(String msg) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final List<Account>? accounts = _accounts;
     return Scaffold(
-      appBar: AppBar(title: const Text('Новая операция')),
+      appBar: AppBar(title: Text(l.txNew)),
       body: accounts == null
           ? const Center(child: CircularProgressIndicator())
           : accounts.isEmpty
               ? _NoAccounts()
-              : _form(accounts),
+              : _form(l, accounts),
     );
   }
 
-  Widget _form(List<Account> accounts) {
+  Widget _form(AppLocalizations l, List<Account> accounts) {
+    final String lang = Localizations.localeOf(context).languageCode;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
         SegmentedButton<EntryType>(
-          segments: const <ButtonSegment<EntryType>>[
+          segments: <ButtonSegment<EntryType>>[
             ButtonSegment<EntryType>(
               value: EntryType.expense,
-              label: Text('Расход'),
-              icon: Icon(Icons.south_west),
+              label: Text(l.entryExpense),
+              icon: const Icon(Icons.south_west),
             ),
             ButtonSegment<EntryType>(
               value: EntryType.income,
-              label: Text('Доход'),
-              icon: Icon(Icons.north_east),
+              label: Text(l.entryIncome),
+              icon: const Icon(Icons.north_east),
             ),
           ],
           selected: <EntryType>{_type},
           onSelectionChanged: (Set<EntryType> s) => setState(() {
             _type = s.first;
-            _category = null; // категории зависят от типа
+            _category = null;
           }),
         ),
         const SizedBox(height: 16),
@@ -145,14 +148,14 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
           autofocus: true,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           style: Theme.of(context).textTheme.headlineMedium,
-          decoration: const InputDecoration(
-            labelText: 'Сумма, ₸',
+          decoration: InputDecoration(
+            labelText: l.txAmount,
             hintText: '0',
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 20),
-        Text('Категория', style: Theme.of(context).textTheme.labelLarge),
+        Text(l.fieldCategory, style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 8),
         _CategoryChips(
           categories: _visibleCategories,
@@ -162,9 +165,9 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
         const SizedBox(height: 20),
         DropdownButtonFormField<Account>(
           initialValue: _account,
-          decoration: const InputDecoration(
-            labelText: 'Счёт',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l.fieldAccount,
+            border: const OutlineInputBorder(),
           ),
           items: <DropdownMenuItem<Account>>[
             for (final Account a in accounts)
@@ -176,21 +179,21 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
         OutlinedButton.icon(
           onPressed: _pickDate,
           icon: const Icon(Icons.calendar_today),
-          label: Text(DateFormat.yMMMMd('ru').format(_date)),
+          label: Text(formatFullDate(_date, lang)),
         ),
         const SizedBox(height: 16),
         TextField(
           controller: _note,
-          decoration: const InputDecoration(
-            labelText: 'Заметка (необязательно)',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l.txNote,
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 24),
         FilledButton.icon(
           onPressed: _saving ? null : _save,
           icon: const Icon(Icons.check),
-          label: const Text('Сохранить'),
+          label: Text(l.save),
         ),
       ],
     );
@@ -210,8 +213,9 @@ class _CategoryChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     if (categories.isEmpty) {
-      return const Text('Нет категорий этого типа');
+      return Text(l.txNoCategoriesOfType);
     }
     final String lang = Localizations.localeOf(context).languageCode;
     return Wrap(
@@ -236,20 +240,18 @@ class _CategoryChips extends StatelessWidget {
 class _NoAccounts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Text(
-              'Сначала нужен счёт.\nСоздайте его в «Настройки → Счета».',
-              textAlign: TextAlign.center,
-            ),
+            Text(l.txNeedAccount, textAlign: TextAlign.center),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () => context.go('/settings/accounts/new'),
-              child: const Text('Создать счёт'),
+              child: Text(l.txCreateAccount),
             ),
           ],
         ),

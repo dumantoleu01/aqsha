@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/enums.dart';
 import '../../../core/ui/category_visuals.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/category.dart';
 import 'cubit/categories_cubit.dart';
 import 'cubit/categories_state.dart';
@@ -14,17 +15,18 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     return BlocProvider<CategoriesCubit>(
       create: (_) => getIt<CategoriesCubit>(),
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Категории'),
-            bottom: const TabBar(
+            title: Text(l.catTitle),
+            bottom: TabBar(
               tabs: <Widget>[
-                Tab(text: 'Расходы'),
-                Tab(text: 'Доходы'),
+                Tab(text: l.catExpenses),
+                Tab(text: l.catIncomes),
               ],
             ),
           ),
@@ -66,8 +68,9 @@ class _CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     if (items.isEmpty) {
-      return const Center(child: Text('Пока нет категорий'));
+      return Center(child: Text(l.catEmpty));
     }
     final String lang = Localizations.localeOf(context).languageCode;
     return ListView.separated(
@@ -88,30 +91,31 @@ class _CategoryList extends StatelessWidget {
           title: Text(c.localizedName(lang)),
           trailing: IconButton(
             icon: const Icon(Icons.delete_outline),
-            tooltip: 'Удалить',
-            onPressed: () => _confirmArchive(context, c),
+            tooltip: l.delete,
+            onPressed: () => _confirmArchive(context, c, lang),
           ),
         );
       },
     );
   }
 
-  Future<void> _confirmArchive(BuildContext context, Category c) async {
+  Future<void> _confirmArchive(
+      BuildContext context, Category c, String lang) async {
+    final AppLocalizations l = AppLocalizations.of(context);
     final CategoriesCubit cubit = context.read<CategoriesCubit>();
     final bool? ok = await showDialog<bool>(
       context: context,
       builder: (BuildContext ctx) => AlertDialog(
-        title: const Text('Удалить категорию?'),
-        content: Text(c.localizedName(
-            Localizations.localeOf(context).languageCode)),
+        title: Text(l.catDeleteTitle),
+        content: Text(c.localizedName(lang)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Отмена'),
+            child: Text(l.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Удалить'),
+            child: Text(l.delete),
           ),
         ],
       ),

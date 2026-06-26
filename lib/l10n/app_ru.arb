@@ -1,0 +1,93 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Aqsha",
+  "navDashboard": "Дашборд",
+  "navTransactions": "Операции",
+  "navBudgets": "Бюджеты",
+  "navSettings": "Настройки",
+  "save": "Сохранить",
+  "cancel": "Отмена",
+  "delete": "Удалить",
+  "soon": "Скоро",
+
+  "dashTotalBalance": "Общий баланс",
+  "dashIncome": "Доходы",
+  "dashExpense": "Расходы",
+  "dashExpenseByCategory": "Расходы по категориям",
+  "dashNoExpenses": "Нет расходов за период",
+  "periodDay": "День",
+  "periodWeek": "Неделя",
+  "periodMonth": "Месяц",
+
+  "txTitle": "Операции",
+  "txAdd": "Операция",
+  "txEmpty": "Операций пока нет.\nНажмите «Операция», чтобы добавить первую.",
+  "txNew": "Новая операция",
+  "txAmount": "Сумма, ₸",
+  "txNote": "Заметка (необязательно)",
+  "txNoCategoriesOfType": "Нет категорий этого типа",
+  "txNeedAccount": "Сначала нужен счёт.\nСоздайте его в «Настройки → Счета».",
+  "txCreateAccount": "Создать счёт",
+  "txEnterAmount": "Введите сумму больше нуля",
+  "entryExpense": "Расход",
+  "entryIncome": "Доход",
+  "fieldCategory": "Категория",
+  "fieldAccount": "Счёт",
+  "dayToday": "Сегодня",
+  "dayYesterday": "Вчера",
+
+  "accTitle": "Счета",
+  "accEmpty": "Пока нет счетов.\nНажмите + чтобы добавить первый.",
+  "accNew": "Новый счёт",
+  "accName": "Название",
+  "accNameHint": "Например, Kaspi Gold",
+  "accType": "Тип счёта",
+  "accInitialBalance": "Начальный остаток, ₸",
+  "accEnterName": "Введите название счёта",
+  "accTypeCash": "Наличные",
+  "accTypeCard": "Карта",
+  "accTypeSavings": "Накопления",
+
+  "catTitle": "Категории",
+  "catExpenses": "Расходы",
+  "catIncomes": "Доходы",
+  "catEmpty": "Пока нет категорий",
+  "catNew": "Новая категория",
+  "catNameRu": "Название (рус)",
+  "catNameKk": "Атауы (қаз)",
+  "catIcon": "Иконка",
+  "catColor": "Цвет",
+  "catEnterName": "Введите название категории",
+  "catDeleteTitle": "Удалить категорию?",
+
+  "budTitle": "Бюджеты",
+  "budEmpty": "Бюджетов пока нет.\nЗадайте лимит по категории, нажав +.",
+  "budNew": "Новый бюджет",
+  "budLimit": "Лимит, ₸",
+  "budEnterLimit": "Введите лимит больше нуля",
+  "budChooseCategory": "Выберите категорию",
+  "budNoExpenseCategories": "Нет категорий расходов",
+  "budPeriodWeek": "неделя",
+  "budPeriodMonth": "месяц",
+  "budSpentOfLimit": "{spent} из {limit}",
+  "@budSpentOfLimit": {
+    "placeholders": {
+      "spent": { "type": "String" },
+      "limit": { "type": "String" }
+    }
+  },
+  "budRemaining": "Осталось {amount}",
+  "@budRemaining": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "budOverBy": "Превышен на {amount}",
+  "@budOverBy": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+
+  "setLanguage": "Язык",
+  "setBackup": "Резервная копия",
+  "langKazakh": "Қазақша",
+  "langRussian": "Русский",
+  "langSystem": "Системный"
+}

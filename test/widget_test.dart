@@ -1,10 +1,14 @@
 // Интеграционный smoke-тест: приложение запускается на in-memory БД,
-// строится стартовый экран с нижней навигацией.
+// строится стартовый экран с нижней навигацией (локаль ru).
 import 'package:aqsha/core/database/app_database.dart';
 import 'package:aqsha/core/di/injection.dart';
+import 'package:aqsha/core/locale/locale_cubit.dart';
 import 'package:aqsha/features/accounts/data/accounts_repository_impl.dart';
 import 'package:aqsha/features/accounts/domain/accounts_repository.dart';
 import 'package:aqsha/features/accounts/presentation/cubit/accounts_cubit.dart';
+import 'package:aqsha/features/budgets/data/budgets_repository_impl.dart';
+import 'package:aqsha/features/budgets/domain/budgets_repository.dart';
+import 'package:aqsha/features/budgets/presentation/cubit/budgets_cubit.dart';
 import 'package:aqsha/features/categories/data/categories_repository_impl.dart';
 import 'package:aqsha/features/categories/domain/categories_repository.dart';
 import 'package:aqsha/features/categories/presentation/cubit/categories_cubit.dart';
@@ -18,9 +22,11 @@ import 'package:aqsha/main.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   setUp(() async {
+    SharedPreferences.setMockInitialValues(<String, Object>{'locale_code': 'ru'});
     await getIt.reset();
     getIt
       ..registerSingleton<AppDatabase>(
@@ -33,9 +39,12 @@ void main() {
           () => TransactionsRepositoryImpl(getIt()))
       ..registerLazySingleton<AnalyticsRepository>(
           () => AnalyticsRepositoryImpl(getIt()))
+      ..registerLazySingleton<BudgetsRepository>(
+          () => BudgetsRepositoryImpl(getIt()))
       ..registerFactory<AccountsCubit>(() => AccountsCubit(getIt()))
       ..registerFactory<CategoriesCubit>(() => CategoriesCubit(getIt()))
       ..registerFactory<TransactionsCubit>(() => TransactionsCubit(getIt()))
+      ..registerFactory<BudgetsCubit>(() => BudgetsCubit(getIt()))
       ..registerFactory<DashboardCubit>(() => DashboardCubit(getIt(), getIt()));
   });
 
@@ -46,17 +55,16 @@ void main() {
     await getIt.reset();
   });
 
-  testWidgets('Приложение запускается с нижней навигацией',
+  testWidgets('Приложение запускается с нижней навигацией (ru)',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const AqshaApp());
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(AqshaApp(localeCubit: LocaleCubit(prefs)));
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('Дашборд'), findsWidgets);
     expect(find.text('Операции'), findsOneWidget);
     expect(find.text('Настройки'), findsOneWidget);
 
-    // Корректно размонтируем дерево и даём drift-таймерам отработать,
-    // чтобы тест не падал на "pending timers".
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));
   });

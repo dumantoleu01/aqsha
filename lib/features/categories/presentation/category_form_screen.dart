@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/enums.dart';
 import '../../../core/ui/category_visuals.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/categories_repository.dart';
 
 class CategoryFormScreen extends StatefulWidget {
@@ -29,15 +30,14 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
   }
 
   Future<void> _save() async {
+    final AppLocalizations l = AppLocalizations.of(context);
     String ru = _nameRu.text.trim();
     String kk = _nameKk.text.trim();
     if (ru.isEmpty && kk.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Введите название категории')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.catEnterName)));
       return;
     }
-    // если одно из названий пустое — копируем другое
     if (ru.isEmpty) ru = kk;
     if (kk.isEmpty) kk = ru;
 
@@ -60,23 +60,24 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final Color selectedColor = Color(CategoryVisuals.colors[_colorIndex]);
     return Scaffold(
-      appBar: AppBar(title: const Text('Новая категория')),
+      appBar: AppBar(title: Text(l.catNew)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
           SegmentedButton<EntryType>(
-            segments: const <ButtonSegment<EntryType>>[
+            segments: <ButtonSegment<EntryType>>[
               ButtonSegment<EntryType>(
                 value: EntryType.expense,
-                label: Text('Расход'),
-                icon: Icon(Icons.south_west),
+                label: Text(l.entryExpense),
+                icon: const Icon(Icons.south_west),
               ),
               ButtonSegment<EntryType>(
                 value: EntryType.income,
-                label: Text('Доход'),
-                icon: Icon(Icons.north_east),
+                label: Text(l.entryIncome),
+                icon: const Icon(Icons.north_east),
               ),
             ],
             selected: <EntryType>{_type},
@@ -87,22 +88,22 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
           TextField(
             controller: _nameRu,
             textCapitalization: TextCapitalization.sentences,
-            decoration: const InputDecoration(
-              labelText: 'Название (рус)',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l.catNameRu,
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _nameKk,
             textCapitalization: TextCapitalization.sentences,
-            decoration: const InputDecoration(
-              labelText: 'Атауы (қаз)',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l.catNameKk,
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 20),
-          Text('Иконка', style: Theme.of(context).textTheme.labelLarge),
+          Text(l.catIcon, style: Theme.of(context).textTheme.labelLarge),
           const SizedBox(height: 8),
           _IconPicker(
             selected: _iconIndex,
@@ -110,7 +111,7 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
             onPick: (int i) => setState(() => _iconIndex = i),
           ),
           const SizedBox(height: 20),
-          Text('Цвет', style: Theme.of(context).textTheme.labelLarge),
+          Text(l.catColor, style: Theme.of(context).textTheme.labelLarge),
           const SizedBox(height: 8),
           _ColorPicker(
             selected: _colorIndex,
@@ -120,7 +121,7 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
           FilledButton.icon(
             onPressed: _saving ? null : _save,
             icon: const Icon(Icons.check),
-            label: const Text('Сохранить'),
+            label: Text(l.save),
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import '../../../core/di/injection.dart';
 import '../../../core/enums.dart';
 import '../../../core/money/money.dart';
 import '../../../core/ui/category_visuals.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../categories/domain/categories_repository.dart';
 import '../../categories/domain/category.dart';
 import '../domain/budgets_repository.dart';
@@ -47,14 +48,15 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
   }
 
   Future<void> _save() async {
+    final AppLocalizations l = AppLocalizations.of(context);
     final double major =
         double.tryParse(_limit.text.replaceAll(',', '.').trim()) ?? 0;
     if (major <= 0) {
-      _toast('Введите лимит больше нуля');
+      _toast(l.budEnterLimit);
       return;
     }
     if (_category == null) {
-      _toast('Выберите категорию');
+      _toast(l.budChooseCategory);
       return;
     }
     setState(() => _saving = true);
@@ -71,28 +73,29 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
     }
   }
 
-  void _toast(String msg) => ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(msg)));
+  void _toast(String msg) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final List<Category>? cats = _categories;
     return Scaffold(
-      appBar: AppBar(title: const Text('Новый бюджет')),
+      appBar: AppBar(title: Text(l.budNew)),
       body: cats == null
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               padding: const EdgeInsets.all(16),
               children: <Widget>[
                 SegmentedButton<BudgetPeriod>(
-                  segments: const <ButtonSegment<BudgetPeriod>>[
+                  segments: <ButtonSegment<BudgetPeriod>>[
                     ButtonSegment<BudgetPeriod>(
                       value: BudgetPeriod.week,
-                      label: Text('Неделя'),
+                      label: Text(l.periodWeek),
                     ),
                     ButtonSegment<BudgetPeriod>(
                       value: BudgetPeriod.month,
-                      label: Text('Месяц'),
+                      label: Text(l.periodMonth),
                     ),
                   ],
                   selected: <BudgetPeriod>{_period},
@@ -100,7 +103,7 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                       setState(() => _period = s.first),
                 ),
                 const SizedBox(height: 20),
-                Text('Категория',
+                Text(l.fieldCategory,
                     style: Theme.of(context).textTheme.labelLarge),
                 const SizedBox(height: 8),
                 _CategoryChips(
@@ -113,17 +116,17 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                   controller: _limit,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    labelText: 'Лимит, ₸',
+                  decoration: InputDecoration(
+                    labelText: l.budLimit,
                     hintText: '0',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 24),
                 FilledButton.icon(
                   onPressed: _saving ? null : _save,
                   icon: const Icon(Icons.check),
-                  label: const Text('Сохранить'),
+                  label: Text(l.save),
                 ),
               ],
             ),
@@ -144,8 +147,9 @@ class _CategoryChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     if (categories.isEmpty) {
-      return const Text('Нет категорий расходов');
+      return Text(l.budNoExpenseCategories);
     }
     final String lang = Localizations.localeOf(context).languageCode;
     return Wrap(

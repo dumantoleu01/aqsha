@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/ui/category_visuals.dart';
 import '../../../core/ui/date_labels.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/transaction_list_item.dart';
 import 'cubit/transactions_cubit.dart';
 import 'cubit/transactions_state.dart';
@@ -14,14 +15,15 @@ class TransactionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     return BlocProvider<TransactionsCubit>(
       create: (_) => getIt<TransactionsCubit>(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Операции')),
+        appBar: AppBar(title: Text(l.txTitle)),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => context.go('/transactions/new'),
           icon: const Icon(Icons.add),
-          label: const Text('Операция'),
+          label: Text(l.txAdd),
         ),
         body: BlocBuilder<TransactionsCubit, TransactionsState>(
           builder: (BuildContext context, TransactionsState state) =>
@@ -30,26 +32,14 @@ class TransactionsScreen extends StatelessWidget {
               const Center(child: CircularProgressIndicator()),
             TransactionsLoaded(:final List<TransactionListItem> items) =>
               items.isEmpty
-                  ? const _Empty()
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(l.txEmpty, textAlign: TextAlign.center),
+                      ),
+                    )
                   : _Ledger(items: items),
           },
-        ),
-      ),
-    );
-  }
-}
-
-class _Empty extends StatelessWidget {
-  const _Empty();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Text(
-          'Операций пока нет.\nНажмите «Операция», чтобы добавить первую.',
-          textAlign: TextAlign.center,
         ),
       ),
     );
@@ -63,15 +53,22 @@ class _Ledger extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final String lang = Localizations.localeOf(context).languageCode;
-    // items уже отсортированы по дате (свежие сверху) — вставляем заголовки дней.
     final List<Widget> children = <Widget>[];
     DateTime? currentDay;
     for (final TransactionListItem item in items) {
       final DateTime day = DateUtils.dateOnly(item.date);
       if (currentDay == null || day != currentDay) {
         currentDay = day;
-        children.add(_DayHeader(label: formatDayHeader(item.date, locale: lang)));
+        children.add(_DayHeader(
+          label: formatDayHeader(
+            item.date,
+            today: l.dayToday,
+            yesterday: l.dayYesterday,
+            locale: lang,
+          ),
+        ));
       }
       children.add(_TxTile(item: item, lang: lang));
     }

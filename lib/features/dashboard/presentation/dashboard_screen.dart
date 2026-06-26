@@ -5,11 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/money/money.dart';
 import '../../../core/ui/category_visuals.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/category_spending.dart';
 import '../domain/period_summary.dart';
 import 'cubit/dashboard_cubit.dart';
 import 'cubit/dashboard_state.dart';
 import 'dashboard_period.dart';
+
+String _periodLabel(AppLocalizations l, DashboardPeriod p) => switch (p) {
+      DashboardPeriod.day => l.periodDay,
+      DashboardPeriod.week => l.periodWeek,
+      DashboardPeriod.month => l.periodMonth,
+    };
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -40,17 +47,19 @@ class _DashboardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final String lang = Localizations.localeOf(context).languageCode;
     final PeriodSummary s = state.summary;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
-        _BalanceCard(balance: Money(state.totalBalanceMinor)),
+        _BalanceCard(label: l.dashTotalBalance, balance: Money(state.totalBalanceMinor)),
         const SizedBox(height: 16),
         SegmentedButton<DashboardPeriod>(
           segments: <ButtonSegment<DashboardPeriod>>[
             for (final DashboardPeriod p in DashboardPeriod.values)
-              ButtonSegment<DashboardPeriod>(value: p, label: Text(p.label)),
+              ButtonSegment<DashboardPeriod>(
+                  value: p, label: Text(_periodLabel(l, p))),
           ],
           selected: <DashboardPeriod>{state.period},
           onSelectionChanged: (Set<DashboardPeriod> sel) =>
@@ -61,7 +70,7 @@ class _DashboardBody extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: _MiniCard(
-                label: 'Доходы',
+                label: l.dashIncome,
                 amount: s.income,
                 color: const Color(0xFF2E7D32),
                 icon: Icons.north_east,
@@ -70,7 +79,7 @@ class _DashboardBody extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _MiniCard(
-                label: 'Расходы',
+                label: l.dashExpense,
                 amount: s.expense,
                 color: Theme.of(context).colorScheme.error,
                 icon: Icons.south_west,
@@ -79,13 +88,13 @@ class _DashboardBody extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 24),
-        Text('Расходы по категориям',
+        Text(l.dashExpenseByCategory,
             style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 12),
         if (s.expenseByCategory.isEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 32),
-            child: Center(child: Text('Нет расходов за период')),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: Center(child: Text(l.dashNoExpenses)),
           )
         else
           _ExpensePie(summary: s, lang: lang),
@@ -95,8 +104,9 @@ class _DashboardBody extends StatelessWidget {
 }
 
 class _BalanceCard extends StatelessWidget {
-  const _BalanceCard({required this.balance});
+  const _BalanceCard({required this.label, required this.balance});
 
+  final String label;
   final Money balance;
 
   @override
@@ -109,7 +119,7 @@ class _BalanceCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Общий баланс',
+            Text(label,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: scheme.onPrimaryContainer,
                     )),
