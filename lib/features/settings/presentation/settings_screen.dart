@@ -17,6 +17,13 @@ class SettingsScreen extends StatelessWidget {
             onTap: () => context.go('/settings/accounts'),
           ),
           const Divider(height: 1),
+          ListTile(
+            leading: const Icon(Icons.category_outlined),
+            title: const Text('Категории'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.go('/settings/categories'),
+          ),
+          const Divider(height: 1),
           const ListTile(
             leading: Icon(Icons.language_outlined),
             title: Text('Язык'),
