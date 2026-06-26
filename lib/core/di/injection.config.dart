@@ -22,6 +22,12 @@ import 'package:aqsha/features/categories/domain/categories_repository.dart'
     as _i1041;
 import 'package:aqsha/features/categories/presentation/cubit/categories_cubit.dart'
     as _i226;
+import 'package:aqsha/features/transactions/data/transactions_repository_impl.dart'
+    as _i537;
+import 'package:aqsha/features/transactions/domain/transactions_repository.dart'
+    as _i1058;
+import 'package:aqsha/features/transactions/presentation/cubit/transactions_cubit.dart'
+    as _i715;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -33,6 +39,9 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.lazySingleton<_i633.AppDatabase>(() => _i633.AppDatabase());
+    gh.lazySingleton<_i1058.TransactionsRepository>(
+      () => _i537.TransactionsRepositoryImpl(gh<_i633.AppDatabase>()),
+    );
     gh.lazySingleton<_i1041.CategoriesRepository>(
       () => _i1029.CategoriesRepositoryImpl(gh<_i633.AppDatabase>()),
     );
@@ -41,6 +50,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i1043.AccountsRepository>(
       () => _i361.AccountsRepositoryImpl(gh<_i633.AppDatabase>()),
+    );
+    gh.factory<_i715.TransactionsCubit>(
+      () => _i715.TransactionsCubit(gh<_i1058.TransactionsRepository>()),
     );
     gh.factory<_i980.AccountsCubit>(
       () => _i980.AccountsCubit(gh<_i1043.AccountsRepository>()),

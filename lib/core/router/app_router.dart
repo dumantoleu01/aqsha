@@ -8,6 +8,7 @@ import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/categories/presentation/category_form_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../../features/transactions/presentation/transaction_form_screen.dart';
 import '../../features/transactions/presentation/transactions_screen.dart';
 import 'app_shell.dart';
 
@@ -35,6 +36,13 @@ final GoRouter appRouter = GoRouter(
               path: '/transactions',
               builder: (BuildContext context, GoRouterState state) =>
                   const TransactionsScreen(),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: 'new',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const TransactionFormScreen(),
+                ),
+              ],
             ),
           ],
         ),
