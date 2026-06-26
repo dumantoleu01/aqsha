@@ -6,12 +6,17 @@ import 'core/di/injection.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/onboarding/presentation/onboarding_screen.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (!getIt.isRegistered<SharedPreferences>()) {
+    getIt.registerSingleton<SharedPreferences>(prefs);
+  }
+  onboardingCompleted = prefs.getBool(onboardedPrefKey) ?? false;
   runApp(AqshaApp(localeCubit: LocaleCubit(prefs)));
 }
 

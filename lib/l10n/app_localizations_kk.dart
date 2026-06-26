@@ -231,4 +231,16 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get langSystem => 'Жүйелік';
+
+  @override
+  String get onbWelcome => 'Aqsha-ға қош келдіңіз';
+
+  @override
+  String get onbSubtitle => 'Ақшаңызды оңай әрі ана тіліңізде есептеңіз';
+
+  @override
+  String get onbFirstAccount => 'Алғашқы шотыңыз';
+
+  @override
+  String get onbStart => 'Бастау';
 }

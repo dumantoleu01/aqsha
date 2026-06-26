@@ -89,5 +89,10 @@
   "setBackup": "Резервная копия",
   "langKazakh": "Қазақша",
   "langRussian": "Русский",
-  "langSystem": "Системный"
+  "langSystem": "Системный",
+
+  "onbWelcome": "Добро пожаловать в Aqsha",
+  "onbSubtitle": "Учитывайте деньги просто и на родном языке",
+  "onbFirstAccount": "Ваш первый счёт",
+  "onbStart": "Начать"
 }

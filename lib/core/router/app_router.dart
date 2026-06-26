@@ -8,15 +8,30 @@ import '../../features/budgets/presentation/budgets_screen.dart';
 import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/categories/presentation/category_form_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/transactions/presentation/transaction_form_screen.dart';
 import '../../features/transactions/presentation/transactions_screen.dart';
 import 'app_shell.dart';
 
-/// Корневой роутер: ShellRoute с нижней навигацией на 4 ветки.
+/// Выставляется в main() из сохранённого флага. false → показать онбординг.
+bool onboardingCompleted = true;
+
+/// Корневой роутер: онбординг + ShellRoute с нижней навигацией на 4 ветки.
 final GoRouter appRouter = GoRouter(
   initialLocation: '/dashboard',
+  redirect: (BuildContext context, GoRouterState state) {
+    final bool atOnboarding = state.matchedLocation == '/onboarding';
+    if (!onboardingCompleted && !atOnboarding) return '/onboarding';
+    if (onboardingCompleted && atOnboarding) return '/dashboard';
+    return null;
+  },
   routes: <RouteBase>[
+    GoRoute(
+      path: '/onboarding',
+      builder: (BuildContext context, GoRouterState state) =>
+          const OnboardingScreen(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (BuildContext context, GoRouterState state,
               StatefulNavigationShell navigationShell) =>

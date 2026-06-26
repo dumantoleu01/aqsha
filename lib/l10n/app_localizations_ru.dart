@@ -232,4 +232,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get langSystem => 'Системный';
+
+  @override
+  String get onbWelcome => 'Добро пожаловать в Aqsha';
+
+  @override
+  String get onbSubtitle => 'Учитывайте деньги просто и на родном языке';
+
+  @override
+  String get onbFirstAccount => 'Ваш первый счёт';
+
+  @override
+  String get onbStart => 'Начать';
 }

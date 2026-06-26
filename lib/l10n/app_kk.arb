@@ -77,5 +77,10 @@
   "setBackup": "Сақтық көшірме",
   "langKazakh": "Қазақша",
   "langRussian": "Русский",
-  "langSystem": "Жүйелік"
+  "langSystem": "Жүйелік",
+
+  "onbWelcome": "Aqsha-ға қош келдіңіз",
+  "onbSubtitle": "Ақшаңызды оңай әрі ана тіліңізде есептеңіз",
+  "onbFirstAccount": "Алғашқы шотыңыз",
+  "onbStart": "Бастау"
 }

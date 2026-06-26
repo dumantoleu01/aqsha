@@ -529,6 +529,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Системный'**
   String get langSystem;
+
+  /// No description provided for @onbWelcome.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добро пожаловать в Aqsha'**
+  String get onbWelcome;
+
+  /// No description provided for @onbSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Учитывайте деньги просто и на родном языке'**
+  String get onbSubtitle;
+
+  /// No description provided for @onbFirstAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваш первый счёт'**
+  String get onbFirstAccount;
+
+  /// No description provided for @onbStart.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начать'**
+  String get onbStart;
 }
 
 class _AppLocalizationsDelegate

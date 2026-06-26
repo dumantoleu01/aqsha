@@ -3,6 +3,7 @@
 import 'package:aqsha/core/database/app_database.dart';
 import 'package:aqsha/core/di/injection.dart';
 import 'package:aqsha/core/locale/locale_cubit.dart';
+import 'package:aqsha/core/router/app_router.dart';
 import 'package:aqsha/features/accounts/data/accounts_repository_impl.dart';
 import 'package:aqsha/features/accounts/domain/accounts_repository.dart';
 import 'package:aqsha/features/accounts/presentation/cubit/accounts_cubit.dart';
@@ -46,6 +47,7 @@ void main() {
       ..registerFactory<TransactionsCubit>(() => TransactionsCubit(getIt()))
       ..registerFactory<BudgetsCubit>(() => BudgetsCubit(getIt()))
       ..registerFactory<DashboardCubit>(() => DashboardCubit(getIt(), getIt()));
+    onboardingCompleted = true;
   });
 
   tearDown(() async {
@@ -64,6 +66,19 @@ void main() {
     expect(find.text('Дашборд'), findsWidgets);
     expect(find.text('Операции'), findsOneWidget);
     expect(find.text('Настройки'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('Онбординг показывается при первом запуске',
+      (WidgetTester tester) async {
+    onboardingCompleted = false;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(AqshaApp(localeCubit: LocaleCubit(prefs)));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('Добро пожаловать в Aqsha'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));
