@@ -16,6 +16,11 @@ import 'package:aqsha/features/accounts/domain/accounts_repository.dart'
     as _i1043;
 import 'package:aqsha/features/accounts/presentation/cubit/accounts_cubit.dart'
     as _i980;
+import 'package:aqsha/features/budgets/data/budgets_repository_impl.dart'
+    as _i365;
+import 'package:aqsha/features/budgets/domain/budgets_repository.dart' as _i194;
+import 'package:aqsha/features/budgets/presentation/cubit/budgets_cubit.dart'
+    as _i1040;
 import 'package:aqsha/features/categories/data/categories_repository_impl.dart'
     as _i1029;
 import 'package:aqsha/features/categories/domain/categories_repository.dart'
@@ -57,8 +62,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i226.CategoriesCubit>(
       () => _i226.CategoriesCubit(gh<_i1041.CategoriesRepository>()),
     );
+    gh.lazySingleton<_i194.BudgetsRepository>(
+      () => _i365.BudgetsRepositoryImpl(gh<_i633.AppDatabase>()),
+    );
     gh.lazySingleton<_i1043.AccountsRepository>(
       () => _i361.AccountsRepositoryImpl(gh<_i633.AppDatabase>()),
+    );
+    gh.factory<_i1040.BudgetsCubit>(
+      () => _i1040.BudgetsCubit(gh<_i194.BudgetsRepository>()),
     );
     gh.factory<_i593.DashboardCubit>(
       () => _i593.DashboardCubit(

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/accounts/presentation/account_form_screen.dart';
 import '../../features/accounts/presentation/accounts_screen.dart';
+import '../../features/budgets/presentation/budget_form_screen.dart';
 import '../../features/budgets/presentation/budgets_screen.dart';
 import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/categories/presentation/category_form_screen.dart';
@@ -52,6 +53,13 @@ final GoRouter appRouter = GoRouter(
               path: '/budgets',
               builder: (BuildContext context, GoRouterState state) =>
                   const BudgetsScreen(),
+              routes: <RouteBase>[
+                GoRoute(
+                  path: 'new',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const BudgetFormScreen(),
+                ),
+              ],
             ),
           ],
         ),
