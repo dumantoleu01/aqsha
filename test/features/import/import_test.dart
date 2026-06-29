@@ -10,25 +10,43 @@ void main() {
   group('KaspiStatementParser', () {
     final KaspiStatementParser parser = KaspiStatementParser();
 
-    test('распознаёт расходы и доходы', () {
+    test('распознаёт операции из реального многострочного формата Kaspi', () {
+      // Формат Kaspi: дата / сумма / тип операции / детали — по строкам.
       const String text = '''
-Выписка по карте Kaspi Gold
-26.06.26  -3 500,00 ₸  Покупка  Magnum
-25.06.26  + 150 000,00 ₸  Пополнение  Зарплата
-24.06.26  -1 200 ₸  Покупка  Wolt
-Итого по выписке
+ҮЗІНДІ КӨШІРМЕ
+Күні
+Сомасы
+Операция
+    Толығырақ
+29.06.26
+- 4 000,00 ₸
+Аударым
+    Омиргуль М.
+29.06.26
++ 5 000,00 ₸
+Толықтыру
+    С карты другого банка
+28.06.26
+- 9 676,00 ₸
+Зат сатып алу
+    ИП ШАЛКАРОВ Ж
+29.05.26ж. қолжетімді:
++ 244,69 ₸
 ''';
       final List<ParsedEntry> entries = parser.parse(text);
+      // строка баланса «29.05.26ж. қолжетімді:» не должна попасть → ровно 3
       expect(entries, hasLength(3));
       expect(entries[0].type, EntryType.expense);
-      expect(entries[0].amountMinor, 350000);
-      expect(entries[0].description.toLowerCase(), contains('magnum'));
+      expect(entries[0].amountMinor, 400000);
+      expect(entries[0].description, 'Омиргуль М.');
       expect(entries[1].type, EntryType.income);
-      expect(entries[1].amountMinor, 15000000);
-      expect(entries[2].amountMinor, 120000);
+      expect(entries[1].amountMinor, 500000);
+      expect(entries[1].description, 'С карты другого банка');
+      expect(entries[2].amountMinor, 967600);
+      expect(entries[2].description, 'ИП ШАЛКАРОВ Ж');
     });
 
-    test('строки без даты и суммы игнорируются', () {
+    test('текст без дат/сумм игнорируется', () {
       final List<ParsedEntry> entries =
           parser.parse('Просто текст\nОстаток: 1000 ₸');
       expect(entries, isEmpty);
