@@ -257,6 +257,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get impEmpty => 'Файлдан операциялар табылмады';
 
   @override
+  String get impRawHint =>
+      'Формат танылмады. Төмендегі мәтінді көшіріп, парсерді баптау үшін әзірлеушіге жіберіңіз.';
+
+  @override
+  String get impCopyText => 'Мәтінді көшіру';
+
+  @override
+  String get impCopied => 'Мәтін көшірілді';
+
+  @override
   String get impDuplicate => 'бар';
 
   @override

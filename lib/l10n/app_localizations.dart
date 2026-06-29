@@ -578,6 +578,24 @@ abstract class AppLocalizations {
   /// **'Не удалось распознать операции в файле'**
   String get impEmpty;
 
+  /// No description provided for @impRawHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не распознали формат. Скопируйте текст ниже и пришлите разработчику для настройки парсера.'**
+  String get impRawHint;
+
+  /// No description provided for @impCopyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скопировать текст'**
+  String get impCopyText;
+
+  /// No description provided for @impCopied.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текст скопирован'**
+  String get impCopied;
+
   /// No description provided for @impDuplicate.
   ///
   /// In ru, this message translates to:

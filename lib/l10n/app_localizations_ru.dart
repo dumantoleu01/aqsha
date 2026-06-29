@@ -258,6 +258,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get impEmpty => 'Не удалось распознать операции в файле';
 
   @override
+  String get impRawHint =>
+      'Не распознали формат. Скопируйте текст ниже и пришлите разработчику для настройки парсера.';
+
+  @override
+  String get impCopyText => 'Скопировать текст';
+
+  @override
+  String get impCopied => 'Текст скопирован';
+
+  @override
   String get impDuplicate => 'уже есть';
 
   @override

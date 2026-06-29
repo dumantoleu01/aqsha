@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/di/injection.dart';
@@ -46,6 +46,7 @@ class _ImportScreenState extends State<ImportScreen> {
   List<_Row>? _rows;
   bool _busy = false;
   String? _error;
+  String? _rawText; // извлечённый текст PDF (для диагностики, если не распознали)
 
   @override
   void initState() {
@@ -103,6 +104,7 @@ class _ImportScreenState extends State<ImportScreen> {
 
       setState(() {
         _busy = false;
+        _rawText = text;
         _rows = entries.map((ParsedEntry e) {
           final bool dup = existing.contains(e.importHash);
           return _Row(
@@ -229,21 +231,52 @@ class _ImportScreenState extends State<ImportScreen> {
       );
     }
     if (rows.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(l.impEmpty, textAlign: TextAlign.center),
-              const SizedBox(height: 16),
-              OutlinedButton(
-                onPressed: () => _pickAndParse(l),
-                child: Text(l.impPickFile),
-              ),
-            ],
+      final String raw = (_rawText ?? '').trim();
+      return ListView(
+        padding: const EdgeInsets.all(24),
+        children: <Widget>[
+          Text(l.impEmpty, textAlign: TextAlign.center),
+          const SizedBox(height: 16),
+          Center(
+            child: OutlinedButton(
+              onPressed: () => _pickAndParse(l),
+              child: Text(l.impPickFile),
+            ),
           ),
-        ),
+          const SizedBox(height: 24),
+          // Диагностика: показываем извлечённый текст, чтобы настроить парсер.
+          Text(l.impRawHint, style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              onPressed: raw.isEmpty
+                  ? null
+                  : () {
+                      Clipboard.setData(ClipboardData(text: raw));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l.impCopied)),
+                      );
+                    },
+              icon: const Icon(Icons.copy, size: 18),
+              label: Text(l.impCopyText),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: SelectableText(
+              raw.isEmpty
+                  ? '— (PDF не содержит читаемого текста — возможно, это скан/картинка)'
+                  : (raw.length > 4000 ? raw.substring(0, 4000) : raw),
+              style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+            ),
+          ),
+        ],
       );
     }
     final String lang = Localizations.localeOf(context).languageCode;
