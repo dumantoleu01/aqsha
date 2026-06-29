@@ -110,5 +110,10 @@
   "acBatteryNote": "Шығыстарды жоғалтпау үшін қолданба үшін батарея оптимизациясын өшіріңіз (dontkillmyapp.com)",
   "acDraftsTitle": "Жобалар",
   "acNoDrafts": "Жоба жоқ. Олар Kaspi арқылы төлемдерден кейін пайда болады.",
-  "acConfirm": "Растау"
+  "acConfirm": "Растау",
+
+  "setTheme": "Тақырып",
+  "themeSystem": "Жүйелік",
+  "themeLight": "Жарық",
+  "themeDark": "Қараңғы"
 }

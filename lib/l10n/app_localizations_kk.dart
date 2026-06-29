@@ -328,4 +328,16 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get acConfirm => 'Растау';
+
+  @override
+  String get setTheme => 'Тақырып';
+
+  @override
+  String get themeSystem => 'Жүйелік';
+
+  @override
+  String get themeLight => 'Жарық';
+
+  @override
+  String get themeDark => 'Қараңғы';
 }

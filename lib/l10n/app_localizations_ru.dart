@@ -329,4 +329,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get acConfirm => 'Подтвердить';
+
+  @override
+  String get setTheme => 'Тема';
+
+  @override
+  String get themeSystem => 'Системная';
+
+  @override
+  String get themeLight => 'Светлая';
+
+  @override
+  String get themeDark => 'Тёмная';
 }

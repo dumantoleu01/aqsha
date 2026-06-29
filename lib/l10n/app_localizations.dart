@@ -703,6 +703,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Подтвердить'**
   String get acConfirm;
+
+  /// No description provided for @setTheme.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тема'**
+  String get setTheme;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In ru, this message translates to:
+  /// **'Системная'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In ru, this message translates to:
+  /// **'Светлая'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тёмная'**
+  String get themeDark;
 }
 
 class _AppLocalizationsDelegate

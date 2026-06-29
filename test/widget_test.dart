@@ -4,6 +4,7 @@ import 'package:aqsha/core/database/app_database.dart';
 import 'package:aqsha/core/di/injection.dart';
 import 'package:aqsha/core/locale/locale_cubit.dart';
 import 'package:aqsha/core/router/app_router.dart';
+import 'package:aqsha/core/theme/theme_cubit.dart';
 import 'package:aqsha/features/accounts/data/accounts_repository_impl.dart';
 import 'package:aqsha/features/accounts/domain/accounts_repository.dart';
 import 'package:aqsha/features/accounts/presentation/cubit/accounts_cubit.dart';
@@ -60,7 +61,10 @@ void main() {
   testWidgets('Приложение запускается с нижней навигацией (ru)',
       (WidgetTester tester) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await tester.pumpWidget(AqshaApp(localeCubit: LocaleCubit(prefs)));
+    await tester.pumpWidget(AqshaApp(
+      localeCubit: LocaleCubit(prefs),
+      themeCubit: ThemeCubit(prefs),
+    ));
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('Дашборд'), findsWidgets);
@@ -75,7 +79,10 @@ void main() {
       (WidgetTester tester) async {
     onboardingCompleted = false;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await tester.pumpWidget(AqshaApp(localeCubit: LocaleCubit(prefs)));
+    await tester.pumpWidget(AqshaApp(
+      localeCubit: LocaleCubit(prefs),
+      themeCubit: ThemeCubit(prefs),
+    ));
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text('Добро пожаловать в Aqsha'), findsOneWidget);

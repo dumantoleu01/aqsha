@@ -6,6 +6,7 @@ import 'core/di/injection.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_cubit.dart';
 import 'features/capture/data/notification_capture_service.dart';
 import 'features/onboarding/presentation/onboarding_screen.dart';
 import 'l10n/app_localizations.dart';
@@ -25,26 +26,39 @@ Future<void> main() async {
     capture.start();
   }
 
-  runApp(AqshaApp(localeCubit: LocaleCubit(prefs)));
+  runApp(AqshaApp(
+    localeCubit: LocaleCubit(prefs),
+    themeCubit: ThemeCubit(prefs),
+  ));
 }
 
 class AqshaApp extends StatelessWidget {
-  const AqshaApp({super.key, required this.localeCubit});
+  const AqshaApp({
+    super.key,
+    required this.localeCubit,
+    required this.themeCubit,
+  });
 
   final LocaleCubit localeCubit;
+  final ThemeCubit themeCubit;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LocaleCubit>.value(
-      value: localeCubit,
-      child: BlocBuilder<LocaleCubit, Locale?>(
-        builder: (BuildContext context, Locale? locale) {
+    return MultiBlocProvider(
+      providers: <BlocProvider<dynamic>>[
+        BlocProvider<LocaleCubit>.value(value: localeCubit),
+        BlocProvider<ThemeCubit>.value(value: themeCubit),
+      ],
+      child: Builder(
+        builder: (BuildContext context) {
+          final Locale? locale = context.watch<LocaleCubit>().state;
+          final ThemeMode mode = context.watch<ThemeCubit>().state;
           return MaterialApp.router(
             title: 'Aqsha',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
-            themeMode: ThemeMode.system,
+            themeMode: mode,
             locale: locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

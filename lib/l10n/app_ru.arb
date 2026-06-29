@@ -131,5 +131,10 @@
   "acBatteryNote": "Чтобы не терять траты, отключите для приложения оптимизацию батареи (см. dontkillmyapp.com)",
   "acDraftsTitle": "Черновики",
   "acNoDrafts": "Черновиков нет. Они появятся после оплат через Kaspi.",
-  "acConfirm": "Подтвердить"
+  "acConfirm": "Подтвердить",
+
+  "setTheme": "Тема",
+  "themeSystem": "Системная",
+  "themeLight": "Светлая",
+  "themeDark": "Тёмная"
 }

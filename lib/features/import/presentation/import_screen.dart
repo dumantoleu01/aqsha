@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
@@ -76,9 +77,21 @@ class _ImportScreenState extends State<ImportScreen> {
         allowedExtensions: <String>['pdf'],
         withData: true,
       );
-      final List<int>? bytes = picked?.files.single.bytes;
+      if (picked == null || picked.files.isEmpty) {
+        setState(() => _busy = false); // отмена выбора
+        return;
+      }
+      final PlatformFile file = picked.files.single;
+      List<int>? bytes = file.bytes;
+      // на части платформ bytes пустой — читаем по пути
+      if (bytes == null && file.path != null) {
+        bytes = await File(file.path!).readAsBytes();
+      }
       if (bytes == null) {
-        setState(() => _busy = false);
+        setState(() {
+          _busy = false;
+          _error = l.impEmpty;
+        });
         return;
       }
       final String text = getIt<StatementTextExtractor>()
