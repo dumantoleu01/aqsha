@@ -595,6 +595,60 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Импортировано операций: {count}'**
   String impImported(int count);
+
+  /// No description provided for @bkTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Резервная копия'**
+  String get bkTitle;
+
+  /// No description provided for @bkExport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Экспорт данных'**
+  String get bkExport;
+
+  /// No description provided for @bkExportHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить все данные в файл (.json)'**
+  String get bkExportHint;
+
+  /// No description provided for @bkImport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановить из файла'**
+  String get bkImport;
+
+  /// No description provided for @bkImportHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заменит текущие данные данными из файла'**
+  String get bkImportHint;
+
+  /// No description provided for @bkExported.
+  ///
+  /// In ru, this message translates to:
+  /// **'Данные сохранены'**
+  String get bkExported;
+
+  /// No description provided for @bkRestore.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановить'**
+  String get bkRestore;
+
+  /// No description provided for @bkRestoreConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановление заменит все текущие данные. Продолжить?'**
+  String get bkRestoreConfirm;
+
+  /// No description provided for @bkRestored.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановлено записей: {count}'**
+  String bkRestored(int count);
 }
 
 class _AppLocalizationsDelegate

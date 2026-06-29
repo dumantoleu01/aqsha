@@ -268,4 +268,34 @@ class AppLocalizationsKk extends AppLocalizations {
   String impImported(int count) {
     return 'Импортталған операциялар: $count';
   }
+
+  @override
+  String get bkTitle => 'Сақтық көшірме';
+
+  @override
+  String get bkExport => 'Деректерді экспорттау';
+
+  @override
+  String get bkExportHint => 'Барлық деректерді файлға (.json) сақтау';
+
+  @override
+  String get bkImport => 'Файлдан қалпына келтіру';
+
+  @override
+  String get bkImportHint => 'Ағымдағы деректерді файлдағыға ауыстырады';
+
+  @override
+  String get bkExported => 'Деректер сақталды';
+
+  @override
+  String get bkRestore => 'Қалпына келтіру';
+
+  @override
+  String get bkRestoreConfirm =>
+      'Қалпына келтіру барлық ағымдағы деректерді ауыстырады. Жалғастырамыз ба?';
+
+  @override
+  String bkRestored(int count) {
+    return 'Қалпына келтірілді: $count';
+  }
 }

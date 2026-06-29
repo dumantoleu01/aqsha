@@ -108,5 +108,18 @@
   "impImported": "Импортировано операций: {count}",
   "@impImported": {
     "placeholders": { "count": { "type": "int" } }
+  },
+
+  "bkTitle": "Резервная копия",
+  "bkExport": "Экспорт данных",
+  "bkExportHint": "Сохранить все данные в файл (.json)",
+  "bkImport": "Восстановить из файла",
+  "bkImportHint": "Заменит текущие данные данными из файла",
+  "bkExported": "Данные сохранены",
+  "bkRestore": "Восстановить",
+  "bkRestoreConfirm": "Восстановление заменит все текущие данные. Продолжить?",
+  "bkRestored": "Восстановлено записей: {count}",
+  "@bkRestored": {
+    "placeholders": { "count": { "type": "int" } }
   }
 }

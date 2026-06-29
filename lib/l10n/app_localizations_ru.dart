@@ -269,4 +269,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String impImported(int count) {
     return 'Импортировано операций: $count';
   }
+
+  @override
+  String get bkTitle => 'Резервная копия';
+
+  @override
+  String get bkExport => 'Экспорт данных';
+
+  @override
+  String get bkExportHint => 'Сохранить все данные в файл (.json)';
+
+  @override
+  String get bkImport => 'Восстановить из файла';
+
+  @override
+  String get bkImportHint => 'Заменит текущие данные данными из файла';
+
+  @override
+  String get bkExported => 'Данные сохранены';
+
+  @override
+  String get bkRestore => 'Восстановить';
+
+  @override
+  String get bkRestoreConfirm =>
+      'Восстановление заменит все текущие данные. Продолжить?';
+
+  @override
+  String bkRestored(int count) {
+    return 'Восстановлено записей: $count';
+  }
 }

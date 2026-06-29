@@ -54,9 +54,9 @@ class SettingsScreen extends StatelessWidget {
           const Divider(height: 1),
           ListTile(
             leading: const Icon(Icons.backup_outlined),
-            title: Text(l.setBackup),
-            subtitle: Text(l.soon),
-            enabled: false,
+            title: Text(l.bkTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.go('/settings/backup'),
           ),
         ],
       ),
