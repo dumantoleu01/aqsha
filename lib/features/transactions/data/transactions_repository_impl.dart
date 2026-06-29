@@ -69,6 +69,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     required DateTime date,
     String? note,
     String? merchant,
+    String? importHash,
   }) {
     return _db.into(_db.transactions).insert(
           TransactionsCompanion.insert(
@@ -79,6 +80,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
             date: date,
             note: Value<String?>(note),
             merchant: Value<String?>(merchant),
+            importHash: Value<String?>(importHash),
           ),
         );
   }
@@ -88,5 +90,17 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     await (_db.delete(_db.transactions)
           ..where(($TransactionsTable t) => t.id.equals(id)))
         .go();
+  }
+
+  @override
+  Future<Set<String>> findExistingHashes(List<String> hashes) async {
+    if (hashes.isEmpty) return <String>{};
+    final List<TransactionRow> rows = await (_db.select(_db.transactions)
+          ..where(($TransactionsTable t) => t.importHash.isIn(hashes)))
+        .get();
+    return rows
+        .map((TransactionRow r) => r.importHash)
+        .whereType<String>()
+        .toSet();
   }
 }

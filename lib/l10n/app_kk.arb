@@ -82,5 +82,13 @@
   "onbWelcome": "Aqsha-ға қош келдіңіз",
   "onbSubtitle": "Ақшаңызды оңай әрі ана тіліңізде есептеңіз",
   "onbFirstAccount": "Алғашқы шотыңыз",
-  "onbStart": "Бастау"
+  "onbStart": "Бастау",
+
+  "impTitle": "Үзінді импорты",
+  "impHint": "Kaspi-ден PDF үзінді жүктеп, осында таңдаңыз",
+  "impPickFile": "PDF таңдау",
+  "impEmpty": "Файлдан операциялар табылмады",
+  "impDuplicate": "бар",
+  "impImport": "Импорттау ({count})",
+  "impImported": "Импортталған операциялар: {count}"
 }

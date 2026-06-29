@@ -33,6 +33,11 @@ import 'package:aqsha/features/dashboard/domain/analytics_repository.dart'
     as _i494;
 import 'package:aqsha/features/dashboard/presentation/cubit/dashboard_cubit.dart'
     as _i593;
+import 'package:aqsha/features/import/data/kaspi_statement_parser.dart'
+    as _i505;
+import 'package:aqsha/features/import/data/statement_text_extractor.dart'
+    as _i333;
+import 'package:aqsha/features/import/domain/statement_parser.dart' as _i896;
 import 'package:aqsha/features/transactions/data/transactions_repository_impl.dart'
     as _i537;
 import 'package:aqsha/features/transactions/domain/transactions_repository.dart'
@@ -50,6 +55,10 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.lazySingleton<_i633.AppDatabase>(() => _i633.AppDatabase());
+    gh.lazySingleton<_i333.StatementTextExtractor>(
+      () => _i333.StatementTextExtractor(),
+    );
+    gh.lazySingleton<_i896.StatementParser>(() => _i505.KaspiStatementParser());
     gh.lazySingleton<_i1058.TransactionsRepository>(
       () => _i537.TransactionsRepositoryImpl(gh<_i633.AppDatabase>()),
     );

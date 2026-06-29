@@ -243,4 +243,29 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get onbStart => 'Бастау';
+
+  @override
+  String get impTitle => 'Үзінді импорты';
+
+  @override
+  String get impHint => 'Kaspi-ден PDF үзінді жүктеп, осында таңдаңыз';
+
+  @override
+  String get impPickFile => 'PDF таңдау';
+
+  @override
+  String get impEmpty => 'Файлдан операциялар табылмады';
+
+  @override
+  String get impDuplicate => 'бар';
+
+  @override
+  String impImport(int count) {
+    return 'Импорттау ($count)';
+  }
+
+  @override
+  String impImported(int count) {
+    return 'Импортталған операциялар: $count';
+  }
 }

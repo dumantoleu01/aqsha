@@ -38,6 +38,13 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(height: 1),
           ListTile(
+            leading: const Icon(Icons.upload_file_outlined),
+            title: Text(l.impTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.go('/settings/import'),
+          ),
+          const Divider(height: 1),
+          ListTile(
             leading: const Icon(Icons.language_outlined),
             title: Text(l.setLanguage),
             subtitle: Text(_languageName(l, current)),

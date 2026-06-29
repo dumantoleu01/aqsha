@@ -94,5 +94,19 @@
   "onbWelcome": "Добро пожаловать в Aqsha",
   "onbSubtitle": "Учитывайте деньги просто и на родном языке",
   "onbFirstAccount": "Ваш первый счёт",
-  "onbStart": "Начать"
+  "onbStart": "Начать",
+
+  "impTitle": "Импорт выписки",
+  "impHint": "Выгрузите PDF-выписку из Kaspi и выберите её здесь",
+  "impPickFile": "Выбрать PDF",
+  "impEmpty": "Не удалось распознать операции в файле",
+  "impDuplicate": "уже есть",
+  "impImport": "Импортировать ({count})",
+  "@impImport": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "impImported": "Импортировано операций: {count}",
+  "@impImported": {
+    "placeholders": { "count": { "type": "int" } }
+  }
 }

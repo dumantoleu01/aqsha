@@ -8,6 +8,7 @@ import '../../features/budgets/presentation/budgets_screen.dart';
 import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/categories/presentation/category_form_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/import/presentation/import_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/transactions/presentation/transaction_form_screen.dart';
@@ -108,6 +109,11 @@ final GoRouter appRouter = GoRouter(
                           const CategoryFormScreen(),
                     ),
                   ],
+                ),
+                GoRoute(
+                  path: 'import',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const ImportScreen(),
                 ),
               ],
             ),

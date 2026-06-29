@@ -24,4 +24,7 @@ class Transactions extends Table {
       .withDefault(Constant(TransactionStatus.confirmed.index))();
   DateTimeColumn get createdAt =>
       dateTime().withDefault(currentDateAndTime)();
+
+  /// Сигнатура операции из импорта выписки — для защиты от дублей.
+  TextColumn get importHash => text().nullable()();
 }

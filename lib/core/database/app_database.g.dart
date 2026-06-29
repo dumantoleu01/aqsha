@@ -1216,6 +1216,17 @@ class $TransactionsTable extends Transactions
     requiredDuringInsert: false,
     defaultValue: currentDateAndTime,
   );
+  static const VerificationMeta _importHashMeta = const VerificationMeta(
+    'importHash',
+  );
+  @override
+  late final GeneratedColumn<String> importHash = GeneratedColumn<String>(
+    'import_hash',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1229,6 +1240,7 @@ class $TransactionsTable extends Transactions
     source,
     status,
     createdAt,
+    importHash,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1296,6 +1308,12 @@ class $TransactionsTable extends Transactions
         createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
       );
     }
+    if (data.containsKey('import_hash')) {
+      context.handle(
+        _importHashMeta,
+        importHash.isAcceptableOrUnknown(data['import_hash']!, _importHashMeta),
+      );
+    }
     return context;
   }
 
@@ -1355,6 +1373,10 @@ class $TransactionsTable extends Transactions
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      importHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}import_hash'],
+      ),
     );
   }
 
@@ -1385,6 +1407,9 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
   final TransactionSource source;
   final TransactionStatus status;
   final DateTime createdAt;
+
+  /// Сигнатура операции из импорта выписки — для защиты от дублей.
+  final String? importHash;
   const TransactionRow({
     required this.id,
     required this.accountId,
@@ -1397,6 +1422,7 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
     required this.source,
     required this.status,
     required this.createdAt,
+    this.importHash,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1430,6 +1456,9 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
       );
     }
     map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || importHash != null) {
+      map['import_hash'] = Variable<String>(importHash);
+    }
     return map;
   }
 
@@ -1450,6 +1479,9 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
       source: Value(source),
       status: Value(status),
       createdAt: Value(createdAt),
+      importHash: importHash == null && nullToAbsent
+          ? const Value.absent()
+          : Value(importHash),
     );
   }
 
@@ -1476,6 +1508,7 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
         serializer.fromJson<int>(json['status']),
       ),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      importHash: serializer.fromJson<String?>(json['importHash']),
     );
   }
   @override
@@ -1499,6 +1532,7 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
         $TransactionsTable.$converterstatus.toJson(status),
       ),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'importHash': serializer.toJson<String?>(importHash),
     };
   }
 
@@ -1514,6 +1548,7 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
     TransactionSource? source,
     TransactionStatus? status,
     DateTime? createdAt,
+    Value<String?> importHash = const Value.absent(),
   }) => TransactionRow(
     id: id ?? this.id,
     accountId: accountId ?? this.accountId,
@@ -1526,6 +1561,7 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
     source: source ?? this.source,
     status: status ?? this.status,
     createdAt: createdAt ?? this.createdAt,
+    importHash: importHash.present ? importHash.value : this.importHash,
   );
   TransactionRow copyWithCompanion(TransactionsCompanion data) {
     return TransactionRow(
@@ -1544,6 +1580,9 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
       source: data.source.present ? data.source.value : this.source,
       status: data.status.present ? data.status.value : this.status,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      importHash: data.importHash.present
+          ? data.importHash.value
+          : this.importHash,
     );
   }
 
@@ -1560,7 +1599,8 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
           ..write('merchant: $merchant, ')
           ..write('source: $source, ')
           ..write('status: $status, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('importHash: $importHash')
           ..write(')'))
         .toString();
   }
@@ -1578,6 +1618,7 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
     source,
     status,
     createdAt,
+    importHash,
   );
   @override
   bool operator ==(Object other) =>
@@ -1593,7 +1634,8 @@ class TransactionRow extends DataClass implements Insertable<TransactionRow> {
           other.merchant == this.merchant &&
           other.source == this.source &&
           other.status == this.status &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.importHash == this.importHash);
 }
 
 class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
@@ -1608,6 +1650,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
   final Value<TransactionSource> source;
   final Value<TransactionStatus> status;
   final Value<DateTime> createdAt;
+  final Value<String?> importHash;
   const TransactionsCompanion({
     this.id = const Value.absent(),
     this.accountId = const Value.absent(),
@@ -1620,6 +1663,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
     this.source = const Value.absent(),
     this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.importHash = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.id = const Value.absent(),
@@ -1633,6 +1677,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
     this.source = const Value.absent(),
     this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.importHash = const Value.absent(),
   }) : accountId = Value(accountId),
        amountMinor = Value(amountMinor),
        type = Value(type),
@@ -1649,6 +1694,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
     Expression<int>? source,
     Expression<int>? status,
     Expression<DateTime>? createdAt,
+    Expression<String>? importHash,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1662,6 +1708,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
       if (source != null) 'source': source,
       if (status != null) 'status': status,
       if (createdAt != null) 'created_at': createdAt,
+      if (importHash != null) 'import_hash': importHash,
     });
   }
 
@@ -1677,6 +1724,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
     Value<TransactionSource>? source,
     Value<TransactionStatus>? status,
     Value<DateTime>? createdAt,
+    Value<String?>? importHash,
   }) {
     return TransactionsCompanion(
       id: id ?? this.id,
@@ -1690,6 +1738,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
       source: source ?? this.source,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
+      importHash: importHash ?? this.importHash,
     );
   }
 
@@ -1735,6 +1784,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (importHash.present) {
+      map['import_hash'] = Variable<String>(importHash.value);
+    }
     return map;
   }
 
@@ -1751,7 +1803,8 @@ class TransactionsCompanion extends UpdateCompanion<TransactionRow> {
           ..write('merchant: $merchant, ')
           ..write('source: $source, ')
           ..write('status: $status, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('importHash: $importHash')
           ..write(')'))
         .toString();
   }
@@ -3014,6 +3067,7 @@ typedef $$TransactionsTableCreateCompanionBuilder =
       Value<TransactionSource> source,
       Value<TransactionStatus> status,
       Value<DateTime> createdAt,
+      Value<String?> importHash,
     });
 typedef $$TransactionsTableUpdateCompanionBuilder =
     TransactionsCompanion Function({
@@ -3028,6 +3082,7 @@ typedef $$TransactionsTableUpdateCompanionBuilder =
       Value<TransactionSource> source,
       Value<TransactionStatus> status,
       Value<DateTime> createdAt,
+      Value<String?> importHash,
     });
 
 final class $$TransactionsTableReferences
@@ -3127,6 +3182,11 @@ class $$TransactionsTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get importHash => $composableBuilder(
+    column: $table.importHash,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3231,6 +3291,11 @@ class $$TransactionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get importHash => $composableBuilder(
+    column: $table.importHash,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$AccountsTableOrderingComposer get accountId {
     final $$AccountsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -3315,6 +3380,11 @@ class $$TransactionsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get importHash => $composableBuilder(
+    column: $table.importHash,
+    builder: (column) => column,
+  );
 
   $$AccountsTableAnnotationComposer get accountId {
     final $$AccountsTableAnnotationComposer composer = $composerBuilder(
@@ -3402,6 +3472,7 @@ class $$TransactionsTableTableManager
                 Value<TransactionSource> source = const Value.absent(),
                 Value<TransactionStatus> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<String?> importHash = const Value.absent(),
               }) => TransactionsCompanion(
                 id: id,
                 accountId: accountId,
@@ -3414,6 +3485,7 @@ class $$TransactionsTableTableManager
                 source: source,
                 status: status,
                 createdAt: createdAt,
+                importHash: importHash,
               ),
           createCompanionCallback:
               ({
@@ -3428,6 +3500,7 @@ class $$TransactionsTableTableManager
                 Value<TransactionSource> source = const Value.absent(),
                 Value<TransactionStatus> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<String?> importHash = const Value.absent(),
               }) => TransactionsCompanion.insert(
                 id: id,
                 accountId: accountId,
@@ -3440,6 +3513,7 @@ class $$TransactionsTableTableManager
                 source: source,
                 status: status,
                 createdAt: createdAt,
+                importHash: importHash,
               ),
           withReferenceMapper: (p0) => p0
               .map(

@@ -553,6 +553,48 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Начать'**
   String get onbStart;
+
+  /// No description provided for @impTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импорт выписки'**
+  String get impTitle;
+
+  /// No description provided for @impHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выгрузите PDF-выписку из Kaspi и выберите её здесь'**
+  String get impHint;
+
+  /// No description provided for @impPickFile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбрать PDF'**
+  String get impPickFile;
+
+  /// No description provided for @impEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось распознать операции в файле'**
+  String get impEmpty;
+
+  /// No description provided for @impDuplicate.
+  ///
+  /// In ru, this message translates to:
+  /// **'уже есть'**
+  String get impDuplicate;
+
+  /// No description provided for @impImport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импортировать ({count})'**
+  String impImport(int count);
+
+  /// No description provided for @impImported.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импортировано операций: {count}'**
+  String impImported(int count);
 }
 
 class _AppLocalizationsDelegate

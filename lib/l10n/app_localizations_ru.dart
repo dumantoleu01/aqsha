@@ -244,4 +244,29 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get onbStart => 'Начать';
+
+  @override
+  String get impTitle => 'Импорт выписки';
+
+  @override
+  String get impHint => 'Выгрузите PDF-выписку из Kaspi и выберите её здесь';
+
+  @override
+  String get impPickFile => 'Выбрать PDF';
+
+  @override
+  String get impEmpty => 'Не удалось распознать операции в файле';
+
+  @override
+  String get impDuplicate => 'уже есть';
+
+  @override
+  String impImport(int count) {
+    return 'Импортировать ($count)';
+  }
+
+  @override
+  String impImported(int count) {
+    return 'Импортировано операций: $count';
+  }
 }

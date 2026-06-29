@@ -13,7 +13,11 @@ abstract interface class TransactionsRepository {
     required DateTime date,
     String? note,
     String? merchant,
+    String? importHash,
   });
 
   Future<void> deleteTransaction(int id);
+
+  /// Возвращает те из переданных хэшей импорта, что уже есть в БД.
+  Future<Set<String>> findExistingHashes(List<String> hashes);
 }
