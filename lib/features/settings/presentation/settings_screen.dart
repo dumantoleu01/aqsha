@@ -45,6 +45,13 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(height: 1),
           ListTile(
+            leading: const Icon(Icons.notifications_active_outlined),
+            title: Text(l.acTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.go('/settings/capture'),
+          ),
+          const Divider(height: 1),
+          ListTile(
             leading: const Icon(Icons.language_outlined),
             title: Text(l.setLanguage),
             subtitle: Text(_languageName(l, current)),

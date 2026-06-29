@@ -13,11 +13,17 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
   final AppDatabase _db;
 
   @override
-  Stream<List<TransactionListItem>> watchTransactions() {
+  Stream<List<TransactionListItem>> watchTransactions() =>
+      _watchByStatus(TransactionStatus.confirmed);
+
+  @override
+  Stream<List<TransactionListItem>> watchDrafts() =>
+      _watchByStatus(TransactionStatus.draft);
+
+  Stream<List<TransactionListItem>> _watchByStatus(TransactionStatus status) {
     final JoinedSelectStatement<HasResultSet, dynamic> query =
         (_db.select(_db.transactions)
-              ..where(($TransactionsTable t) =>
-                  t.status.equalsValue(TransactionStatus.confirmed))
+              ..where(($TransactionsTable t) => t.status.equalsValue(status))
               ..orderBy(<OrderClauseGenerator<$TransactionsTable>>[
                 ($TransactionsTable t) =>
                     OrderingTerm(expression: t.date, mode: OrderingMode.desc),
@@ -70,6 +76,8 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     String? note,
     String? merchant,
     String? importHash,
+    TransactionStatus? status,
+    TransactionSource? source,
   }) {
     return _db.into(_db.transactions).insert(
           TransactionsCompanion.insert(
@@ -81,8 +89,31 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
             note: Value<String?>(note),
             merchant: Value<String?>(merchant),
             importHash: Value<String?>(importHash),
+            status: status == null
+                ? const Value<TransactionStatus>.absent()
+                : Value<TransactionStatus>(status),
+            source: source == null
+                ? const Value<TransactionSource>.absent()
+                : Value<TransactionSource>(source),
           ),
         );
+  }
+
+  @override
+  Future<void> confirmDraft(int id, {int? categoryId, int? accountId}) async {
+    await (_db.update(_db.transactions)
+          ..where(($TransactionsTable t) => t.id.equals(id)))
+        .write(
+      TransactionsCompanion(
+        status: const Value<TransactionStatus>(TransactionStatus.confirmed),
+        categoryId: categoryId == null
+            ? const Value<int?>.absent()
+            : Value<int?>(categoryId),
+        accountId: accountId == null
+            ? const Value<int>.absent()
+            : Value<int>(accountId),
+      ),
+    );
   }
 
   @override

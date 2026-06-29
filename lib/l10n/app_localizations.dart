@@ -649,6 +649,60 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Восстановлено записей: {count}'**
   String bkRestored(int count);
+
+  /// No description provided for @acTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Автозахват трат'**
+  String get acTitle;
+
+  /// No description provided for @acOnlyAndroid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доступно только на Android'**
+  String get acOnlyAndroid;
+
+  /// No description provided for @acPermissionHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разрешите доступ к уведомлениям, чтобы автоматически ловить траты из пушей Kaspi'**
+  String get acPermissionHint;
+
+  /// No description provided for @acEnable.
+  ///
+  /// In ru, this message translates to:
+  /// **'Включить'**
+  String get acEnable;
+
+  /// No description provided for @acEnabled.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доступ к уведомлениям включён'**
+  String get acEnabled;
+
+  /// No description provided for @acBatteryNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чтобы не терять траты, отключите для приложения оптимизацию батареи (см. dontkillmyapp.com)'**
+  String get acBatteryNote;
+
+  /// No description provided for @acDraftsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Черновики'**
+  String get acDraftsTitle;
+
+  /// No description provided for @acNoDrafts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Черновиков нет. Они появятся после оплат через Kaspi.'**
+  String get acNoDrafts;
+
+  /// No description provided for @acConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердить'**
+  String get acConfirm;
 }
 
 class _AppLocalizationsDelegate

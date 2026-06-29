@@ -6,6 +6,7 @@ import 'core/di/injection.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/capture/data/notification_capture_service.dart';
 import 'features/onboarding/presentation/onboarding_screen.dart';
 import 'l10n/app_localizations.dart';
 
@@ -17,6 +18,13 @@ Future<void> main() async {
     getIt.registerSingleton<SharedPreferences>(prefs);
   }
   onboardingCompleted = prefs.getBool(onboardedPrefKey) ?? false;
+
+  // Android: если доступ к уведомлениям уже выдан — запускаем автозахват.
+  final NotificationCaptureService capture = getIt<NotificationCaptureService>();
+  if (await capture.isEnabled()) {
+    capture.start();
+  }
+
   runApp(AqshaApp(localeCubit: LocaleCubit(prefs)));
 }
 

@@ -121,5 +121,15 @@
   "bkRestored": "Восстановлено записей: {count}",
   "@bkRestored": {
     "placeholders": { "count": { "type": "int" } }
-  }
+  },
+
+  "acTitle": "Автозахват трат",
+  "acOnlyAndroid": "Доступно только на Android",
+  "acPermissionHint": "Разрешите доступ к уведомлениям, чтобы автоматически ловить траты из пушей Kaspi",
+  "acEnable": "Включить",
+  "acEnabled": "Доступ к уведомлениям включён",
+  "acBatteryNote": "Чтобы не терять траты, отключите для приложения оптимизацию батареи (см. dontkillmyapp.com)",
+  "acDraftsTitle": "Черновики",
+  "acNoDrafts": "Черновиков нет. Они появятся после оплат через Kaspi.",
+  "acConfirm": "Подтвердить"
 }

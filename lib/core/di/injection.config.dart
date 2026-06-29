@@ -23,6 +23,11 @@ import 'package:aqsha/features/budgets/data/budgets_repository_impl.dart'
 import 'package:aqsha/features/budgets/domain/budgets_repository.dart' as _i194;
 import 'package:aqsha/features/budgets/presentation/cubit/budgets_cubit.dart'
     as _i1040;
+import 'package:aqsha/features/capture/data/kaspi_push_parser.dart' as _i626;
+import 'package:aqsha/features/capture/data/notification_capture_service.dart'
+    as _i987;
+import 'package:aqsha/features/capture/presentation/cubit/drafts_cubit.dart'
+    as _i965;
 import 'package:aqsha/features/categories/data/categories_repository_impl.dart'
     as _i1029;
 import 'package:aqsha/features/categories/domain/categories_repository.dart'
@@ -60,6 +65,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.lazySingleton<_i1035.FamilyCrypto>(() => _i1035.FamilyCrypto());
     gh.lazySingleton<_i633.AppDatabase>(() => _i633.AppDatabase());
+    gh.lazySingleton<_i626.KaspiPushParser>(() => _i626.KaspiPushParser());
     gh.lazySingleton<_i333.StatementTextExtractor>(
       () => _i333.StatementTextExtractor(),
     );
@@ -94,6 +100,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i494.AnalyticsRepository>(),
         gh<_i1043.AccountsRepository>(),
       ),
+    );
+    gh.lazySingleton<_i987.NotificationCaptureService>(
+      () => _i987.NotificationCaptureService(
+        gh<_i626.KaspiPushParser>(),
+        gh<_i1058.TransactionsRepository>(),
+        gh<_i1043.AccountsRepository>(),
+      ),
+    );
+    gh.factory<_i965.DraftsCubit>(
+      () => _i965.DraftsCubit(gh<_i1058.TransactionsRepository>()),
     );
     gh.factory<_i715.TransactionsCubit>(
       () => _i715.TransactionsCubit(gh<_i1058.TransactionsRepository>()),

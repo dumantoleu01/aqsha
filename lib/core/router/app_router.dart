@@ -6,6 +6,7 @@ import '../../features/accounts/presentation/accounts_screen.dart';
 import '../../features/backup/presentation/backup_screen.dart';
 import '../../features/budgets/presentation/budget_form_screen.dart';
 import '../../features/budgets/presentation/budgets_screen.dart';
+import '../../features/capture/presentation/auto_capture_screen.dart';
 import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/categories/presentation/category_form_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
@@ -115,6 +116,11 @@ final GoRouter appRouter = GoRouter(
                   path: 'import',
                   builder: (BuildContext context, GoRouterState state) =>
                       const ImportScreen(),
+                ),
+                GoRoute(
+                  path: 'capture',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const AutoCaptureScreen(),
                 ),
                 GoRoute(
                   path: 'backup',

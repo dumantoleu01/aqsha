@@ -5,6 +5,9 @@ abstract interface class TransactionsRepository {
   /// Лента подтверждённых операций (свежие сверху) с данными счёта/категории.
   Stream<List<TransactionListItem>> watchTransactions();
 
+  /// Черновики из автозахвата, ожидающие подтверждения.
+  Stream<List<TransactionListItem>> watchDrafts();
+
   Future<int> createTransaction({
     required int accountId,
     int? categoryId,
@@ -14,7 +17,12 @@ abstract interface class TransactionsRepository {
     String? note,
     String? merchant,
     String? importHash,
+    TransactionStatus? status,
+    TransactionSource? source,
   });
+
+  /// Подтверждает черновик (статус → confirmed), опц. меняя счёт/категорию.
+  Future<void> confirmDraft(int id, {int? categoryId, int? accountId});
 
   Future<void> deleteTransaction(int id);
 

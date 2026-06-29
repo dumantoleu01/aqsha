@@ -298,4 +298,34 @@ class AppLocalizationsKk extends AppLocalizations {
   String bkRestored(int count) {
     return 'Қалпына келтірілді: $count';
   }
+
+  @override
+  String get acTitle => 'Шығысты автоматты түсіру';
+
+  @override
+  String get acOnlyAndroid => 'Тек Android-та қолжетімді';
+
+  @override
+  String get acPermissionHint =>
+      'Kaspi push-хабарландыруларынан шығыстарды автоматты түсіру үшін хабарландыруларға рұқсат беріңіз';
+
+  @override
+  String get acEnable => 'Қосу';
+
+  @override
+  String get acEnabled => 'Хабарландыруларға рұқсат қосылған';
+
+  @override
+  String get acBatteryNote =>
+      'Шығыстарды жоғалтпау үшін қолданба үшін батарея оптимизациясын өшіріңіз (dontkillmyapp.com)';
+
+  @override
+  String get acDraftsTitle => 'Жобалар';
+
+  @override
+  String get acNoDrafts =>
+      'Жоба жоқ. Олар Kaspi арқылы төлемдерден кейін пайда болады.';
+
+  @override
+  String get acConfirm => 'Растау';
 }

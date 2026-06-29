@@ -57,6 +57,7 @@ dependencies:
   file_picker: ^11.0.2
   syncfusion_flutter_pdf: ^33.2.13
   cryptography: ^2.9.0
+  notification_listener_service: ^1.0.0
 
 dev_dependencies:
   flutter_test:

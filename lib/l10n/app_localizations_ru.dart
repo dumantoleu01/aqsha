@@ -299,4 +299,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String bkRestored(int count) {
     return 'Восстановлено записей: $count';
   }
+
+  @override
+  String get acTitle => 'Автозахват трат';
+
+  @override
+  String get acOnlyAndroid => 'Доступно только на Android';
+
+  @override
+  String get acPermissionHint =>
+      'Разрешите доступ к уведомлениям, чтобы автоматически ловить траты из пушей Kaspi';
+
+  @override
+  String get acEnable => 'Включить';
+
+  @override
+  String get acEnabled => 'Доступ к уведомлениям включён';
+
+  @override
+  String get acBatteryNote =>
+      'Чтобы не терять траты, отключите для приложения оптимизацию батареи (см. dontkillmyapp.com)';
+
+  @override
+  String get acDraftsTitle => 'Черновики';
+
+  @override
+  String get acNoDrafts =>
+      'Черновиков нет. Они появятся после оплат через Kaspi.';
+
+  @override
+  String get acConfirm => 'Подтвердить';
 }
