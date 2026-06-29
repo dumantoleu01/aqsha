@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:aqsha/core/crypto/family_crypto.dart' as _i1035;
 import 'package:aqsha/core/database/app_database.dart' as _i633;
 import 'package:aqsha/features/accounts/data/accounts_repository_impl.dart'
     as _i361;
@@ -16,6 +17,7 @@ import 'package:aqsha/features/accounts/domain/accounts_repository.dart'
     as _i1043;
 import 'package:aqsha/features/accounts/presentation/cubit/accounts_cubit.dart'
     as _i980;
+import 'package:aqsha/features/backup/data/backup_service.dart' as _i107;
 import 'package:aqsha/features/budgets/data/budgets_repository_impl.dart'
     as _i365;
 import 'package:aqsha/features/budgets/domain/budgets_repository.dart' as _i194;
@@ -38,6 +40,8 @@ import 'package:aqsha/features/import/data/kaspi_statement_parser.dart'
 import 'package:aqsha/features/import/data/statement_text_extractor.dart'
     as _i333;
 import 'package:aqsha/features/import/domain/statement_parser.dart' as _i896;
+import 'package:aqsha/features/sync/data/in_memory_sync_service.dart' as _i13;
+import 'package:aqsha/features/sync/domain/sync_service.dart' as _i561;
 import 'package:aqsha/features/transactions/data/transactions_repository_impl.dart'
     as _i537;
 import 'package:aqsha/features/transactions/domain/transactions_repository.dart'
@@ -54,13 +58,18 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.lazySingleton<_i1035.FamilyCrypto>(() => _i1035.FamilyCrypto());
     gh.lazySingleton<_i633.AppDatabase>(() => _i633.AppDatabase());
     gh.lazySingleton<_i333.StatementTextExtractor>(
       () => _i333.StatementTextExtractor(),
     );
+    gh.lazySingleton<_i561.SyncService>(() => _i13.InMemorySyncService());
     gh.lazySingleton<_i896.StatementParser>(() => _i505.KaspiStatementParser());
     gh.lazySingleton<_i1058.TransactionsRepository>(
       () => _i537.TransactionsRepositoryImpl(gh<_i633.AppDatabase>()),
+    );
+    gh.lazySingleton<_i107.BackupService>(
+      () => _i107.BackupService(gh<_i633.AppDatabase>()),
     );
     gh.lazySingleton<_i1041.CategoriesRepository>(
       () => _i1029.CategoriesRepositoryImpl(gh<_i633.AppDatabase>()),
